@@ -1,0 +1,35 @@
+<!--
+  ============================================
+  SITUS PUBLIK — JADWAL KULIAH (untuk mahasiswa)
+  Upload folder ini ke repo: Web-jadwal-v2
+  JANGAN dicampur dengan file dari folder jadwal-admin!
+  ============================================
+-->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📅 Jadwal Kuliah (PUBLIK)</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="board">
+    <div class="board__header">
+      <p class="board__kicker">Papan Jadwal Jurusan</p>
+      <h1>Jadwal Kuliah</h1>
+      <p>Pilih jurusan, lalu kelas (jika ada), untuk melihat jadwal mata kuliah, dosen pengampu, ruangan, dan waktunya.</p>
+    </div>
+
+    <div class="nav-row">
+      <span id="backBtnSlot"></span>
+      <nav class="trail" id="trail" aria-label="Alur pilihan"></nav>
+    </div>
+
+    <div id="loadWarning"></div>
+    <div id="boardMain"></div>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
