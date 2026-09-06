@@ -1,0 +1,49 @@
+<!--
+  ============================================
+  SITUS PUBLIK — JADWAL KULIAH (untuk mahasiswa)
+  Upload folder ini ke repo: Web-jadwal-v2
+  JANGAN dicampur dengan file dari folder jadwal-admin!
+  ============================================
+-->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📅 Jadwal Kuliah (PUBLIK)</title>
+<link rel="stylesheet" href="style.css">
+<script>
+  // set tema sebelum halaman digambar, supaya tidak "kedip" salah warna
+  (function () {
+    var saved = localStorage.getItem('jadwal-theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+</head>
+<body>
+  <main class="board">
+    <div class="board__header">
+      <div class="heading-block">
+        <p class="board__kicker">Papan Jadwal Jurusan</p>
+        <h1>Jadwal Kuliah</h1>
+        <p>Pilih jurusan, lalu kelas (jika ada), untuk melihat jadwal mata kuliah, dosen pengampu, ruangan, dan waktunya.</p>
+      </div>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti mode terang/gelap">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+    </div>
+
+    <div class="nav-row">
+      <span id="backBtnSlot"></span>
+      <nav class="trail" id="trail" aria-label="Alur pilihan"></nav>
+    </div>
+
+    <div id="loadWarning"></div>
+    <div id="boardMain"></div>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
