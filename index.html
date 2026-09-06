@@ -3,6 +3,11 @@
   SITUS PUBLIK — JADWAL KULIAH (untuk mahasiswa)
   Upload folder ini ke repo: Web-jadwal-v2
   JANGAN dicampur dengan file dari folder jadwal-admin!
+
+  Catatan: hanya tampilan (index.html + style.css) yang diperbarui.
+  app.js dan firebase-config.js TIDAK berubah — semua id yang dipakai
+  app.js (themeToggle, trail, backBtnSlot, loadWarning, boardMain)
+  tetap sama persis.
   ============================================
 -->
 <!DOCTYPE html>
@@ -25,9 +30,9 @@
   <main class="board">
     <div class="board__header">
       <div class="heading-block">
-        <p class="board__kicker">Papan Jadwal Jurusan</p>
+        <p class="board__kicker">Tersinkron langsung dari admin</p>
         <h1>Jadwal Kuliah</h1>
-        <p>Pilih jurusan, lalu kelas (jika ada), untuk melihat jadwal mata kuliah, dosen pengampu, ruangan, dan waktunya.</p>
+        <p>Pilih jurusan, lalu kelas (jika ada), untuk melihat mata kuliah, dosen pengampu, ruangan, dan jam kuliahnya.</p>
       </div>
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti mode terang/gelap">
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
