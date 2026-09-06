@@ -4,10 +4,10 @@
   Upload folder ini ke repo: Web-jadwal-v2
   JANGAN dicampur dengan file dari folder jadwal-admin!
 
-  Catatan: hanya tampilan (index.html + style.css) yang diperbarui.
-  app.js dan firebase-config.js TIDAK berubah — semua id yang dipakai
-  app.js (themeToggle, trail, backBtnSlot, loadWarning, boardMain)
-  tetap sama persis.
+  Catatan: bagian app.js yang berhubungan dengan Firestore/onSnapshot
+  TIDAK diubah. Tambahan di app.js kali ini murni fitur baru (highlight
+  hari ini, ekspor .ics, cetak, menu profil) dan tidak mengubah cara
+  data dimuat/disimpan.
   ============================================
 -->
 <!DOCTYPE html>
@@ -16,6 +16,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>📅 Jadwal Kuliah (PUBLIK)</title>
+<meta name="description" content="Jadwal kuliah TI & SI — realtime dan bisa diekspor ke kalender pribadi.">
+
+<!-- favicon -->
+<link rel="icon" href="icons/favicon.ico" sizes="any">
+<link rel="icon" href="icons/icon-192.png" type="image/png" sizes="192x192">
+
+<!-- Add to Home Screen (Android / PWA) -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" id="themeColorMeta" content="#f5f1e7">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- Add to Home Screen (iOS/Safari) -->
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Jadwal Kuliah">
+
 <link rel="stylesheet" href="style.css">
 <script>
   // set tema sebelum halaman digambar, supaya tidak "kedip" salah warna
@@ -27,6 +44,33 @@
 </script>
 </head>
 <body>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="topbar__brand">
+        <span class="topbar__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><rect x="14.5" y="13" width="3" height="3" rx="0.5" fill="currentColor" stroke="none"/></svg>
+        </span>
+        <span class="topbar__name">Jadwal Kuliah</span>
+      </div>
+      <div class="topbar__actions">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti mode terang/gelap">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <div class="profile-menu">
+          <button class="theme-toggle" id="profileBtn" type="button" aria-label="Profil" aria-haspopup="true" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c1.6-3.4 4.4-5 7.5-5s5.9 1.6 7.5 5"/></svg>
+          </button>
+          <div class="profile-dropdown" id="profileDropdown" hidden>
+            <p class="profile-dropdown__title">Profil</p>
+            <p class="profile-dropdown__note">Akun mahasiswa sedang disiapkan. Nanti kamu bisa menyimpan jurusan &amp; kelas favorit supaya langsung terbuka tiap kunjungan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
   <main class="board">
     <div class="board__header">
       <div class="heading-block">
@@ -34,10 +78,6 @@
         <h1>Jadwal Kuliah</h1>
         <p>Pilih jurusan, lalu kelas (jika ada), untuk melihat mata kuliah, dosen pengampu, ruangan, dan jam kuliahnya.</p>
       </div>
-      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti mode terang/gelap">
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-      </button>
     </div>
 
     <div class="nav-row">
