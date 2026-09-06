@@ -35,6 +35,15 @@ const backBtnSlot = document.getElementById('backBtnSlot');
 const ICON_BACK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>`;
 const ICON_ARROW = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>`;
 
+// --- ganti mode terang / gelap ---
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('jadwal-theme', next);
+});
+
 // onSnapshot = jadwal ikut berubah otomatis (real-time) begitu admin
 // menyimpan perubahan, tanpa perlu reload halaman.
 onSnapshot(
@@ -110,16 +119,18 @@ function renderJurusanChoice() {
       <button class="choice-card" data-jurusan="TI">
         <div class="choice-card__top">
           <h3>Teknik Informatika</h3>
-          <span class="choice-card__arrow">${ICON_ARROW}</span>
+          <span class="choice-card__badge">TI</span>
         </div>
         <p>${JURUSAN_INFO.TI.desk}</p>
+        <div class="choice-card__foot">Lihat jadwal ${ICON_ARROW}</div>
       </button>
       <button class="choice-card" data-jurusan="SI">
         <div class="choice-card__top">
           <h3>Sistem Informasi</h3>
-          <span class="choice-card__arrow">${ICON_ARROW}</span>
+          <span class="choice-card__badge">SI</span>
         </div>
         <p>${JURUSAN_INFO.SI.desk}</p>
+        <div class="choice-card__foot">Lihat jadwal ${ICON_ARROW}</div>
       </button>
     </div>`;
 
@@ -134,16 +145,18 @@ function renderKelasChoice() {
       <button class="choice-card" data-kelas="A">
         <div class="choice-card__top">
           <h3>Kelas TI A</h3>
-          <span class="choice-card__arrow">${ICON_ARROW}</span>
+          <span class="choice-card__badge">A</span>
         </div>
         <p>Lihat jadwal kuliah kelas A.</p>
+        <div class="choice-card__foot">Lihat jadwal ${ICON_ARROW}</div>
       </button>
       <button class="choice-card" data-kelas="B">
         <div class="choice-card__top">
           <h3>Kelas TI B</h3>
-          <span class="choice-card__arrow">${ICON_ARROW}</span>
+          <span class="choice-card__badge">B</span>
         </div>
         <p>Lihat jadwal kuliah kelas B.</p>
+        <div class="choice-card__foot">Lihat jadwal ${ICON_ARROW}</div>
       </button>
     </div>`;
 
@@ -180,27 +193,20 @@ function renderJadwal() {
 
   boardMain.innerHTML = hariTersedia.map(hari => {
     const items = byHari[hari].sort((a, b) => a.jamMulai.localeCompare(b.jamMulai));
-    const tableRows = items.map(item => `
-      <tr>
-        <td class="time-cell">${item.jamMulai}–${item.jamSelesai}</td>
-        <td class="course-cell">
+    const entryRows = items.map(item => `
+      <div class="entry-row">
+        <div class="entry-time">${item.jamMulai}<br>–${item.jamSelesai}</div>
+        <div class="entry-body">
           <strong>${escapeHtml(item.mataKuliah)}</strong>
           <span>${escapeHtml(item.dosen)}</span>
-        </td>
-        <td>${escapeHtml(item.ruangan)}</td>
-      </tr>`).join('');
+        </div>
+        <div class="entry-room">${escapeHtml(item.ruangan)}</div>
+      </div>`).join('');
 
     return `
       <div class="schedule-day">
         <div class="schedule-day__label">${hari}</div>
-        <div class="schedule-card">
-          <table class="schedule-table">
-            <thead>
-              <tr><th style="width:130px;">Waktu</th><th>Mata Kuliah &amp; Dosen</th><th style="width:140px;">Ruangan</th></tr>
-            </thead>
-            <tbody>${tableRows}</tbody>
-          </table>
-        </div>
+        ${entryRows}
       </div>`;
   }).join('');
 }
